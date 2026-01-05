@@ -1,8 +1,25 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const Manager = () => {
-  const [showPassword, setShowPassword] = useState();
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordArray, setPasswordArray] = useState([]);
+  useEffect(() => {
+    let password = localStorage.getItem("password");
+    if (password) {
+      setPasswordArray(JSON.parse(password));
+    }
+  }, []);
+
+  const savePassword = () => {
+    setPasswordArray([...passwordArray, form]);
+    localStorage.setItem("password", JSON.stringify([...passwordArray, form]));
+    console.log([...passwordArray, form]);
+  };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const [form, setForm] = useState({ site: "", username: "", password: "" });
 
   return (
     <>
@@ -18,25 +35,31 @@ const Manager = () => {
           <input
             type="text"
             className="rounded-lg border w-full border-purple-600 text-black p-4 py-1 "
-            name=""
+            name="site"
             placeholder="Enter Website URL"
-            id=""
+            id="URL"
+            value={form.site}
+            onChange={handleChange}
           />
           <div className="flex gap-8 w-full justify-between">
             <input
               type="text"
               className="border border-purple-600 rounded-lg w-full p-4 py-1"
-              name=""
+              name="username"
               placeholder="Enter User Name"
-              id=""
+              id="username"
+              value={form.username}
+              onChange={handleChange}
             />
             <div className="relative">
               <input
-                type="text"
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
                 className="border border-purple-600 rounded-lg w-full p-4 py-1"
-                name=""
-                id=""
                 placeholder="Enter Password"
+                value={form.password}
+                onChange={handleChange}
               />
               <span
                 className="absolute right-2 top-2 cursor-pointer"
@@ -46,7 +69,10 @@ const Manager = () => {
               </span>
             </div>
           </div>
-          <button className="border border-purple-800 bg-purple-400 hover:bg-purple-500 w-fit rounded-full font-semibold px-8 py-1 flex items-center gap-2 justify-center ">
+          <button
+            onClick={savePassword}
+            className="border border-purple-800 bg-purple-400 hover:bg-purple-500 w-fit rounded-full font-semibold px-8 py-1 flex items-center gap-2 justify-center "
+          >
             <lord-icon
               src="https://cdn.lordicon.com/efxgwrkc.json"
               trigger="hover"
