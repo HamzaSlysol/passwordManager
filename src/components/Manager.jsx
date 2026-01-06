@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import Copy from "../assets/copy-alt.png";
+import { toast } from "react-toastify";
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +17,7 @@ const Manager = () => {
     setPasswordArray([...passwordArray, form]);
     localStorage.setItem("password", JSON.stringify([...passwordArray, form]));
     console.log([...passwordArray, form]);
+    toast.success("Password Added Successfully");
   };
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,6 +29,10 @@ const Manager = () => {
       ...prev,
       [index]: !prev[index],
     }));
+  };
+  const copyText = async (text) => {
+    await navigator.clipboard.writeText(text);
+    toast.success("Copied!");
   };
 
   return (
@@ -109,27 +116,57 @@ const Manager = () => {
                 {passwordArray.map((item, index) => {
                   return (
                     <tr key={index}>
-                      <td className=" py-3 border border-white text-center">
-                        <a
-                          href={item.site}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {item.site}
-                        </a>
+                      <td className="py-3 border border-white">
+                        <div className="flex items-center justify-between px-3">
+                          <a
+                            href={item.site}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mx-auto text-center"
+                          >
+                            {item.site}
+                          </a>
+                          <img
+                            src={Copy}
+                            alt="copy"
+                            className="w-4 cursor-pointer"
+                            onClick={() => copyText(item.site)}
+                          />
+                        </div>
                       </td>
-                      <td className=" py-3 border border-white text-center">
-                        {item.username}
+
+                      <td className=" py-3 border border-white">
+                        <div className=" flex items-center justify-between px-3">
+                          {item.username}
+                          <img
+                            src={Copy}
+                            alt="copy"
+                            className="w-4 cursor-pointer"
+                            onClick={() => copyText(item.username)}
+                          />
+                        </div>
                       </td>
                       <td className="py-3 border border-white text-center relative">
-                        {visiblePassword[index] ? item.password : "•••••"}
-                        <div className="absolute right-2 top-4">
-                          <span
-                            className="relative cursor-pointer"
-                            onClick={() => togglePassword(index)}
-                          >
-                            {visiblePassword[index] ? <FiEyeOff /> : <FiEye />}
-                          </span>
+                        <div className=" flex items-center justify-between px-3">
+                          {visiblePassword[index] ? item.password : "•••••"}
+                          <div className="absolute right-8 top-4">
+                            <span
+                              className="relative cursor-pointer"
+                              onClick={() => togglePassword(index)}
+                            >
+                              {visiblePassword[index] ? (
+                                <FiEyeOff />
+                              ) : (
+                                <FiEye />
+                              )}
+                            </span>
+                          </div>
+                          <img
+                            src={Copy}
+                            alt="copy"
+                            className="w-4 cursor-pointer"
+                            onClick={() => copyText(item.password)}
+                          />
                         </div>
                       </td>
                     </tr>

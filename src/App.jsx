@@ -5,6 +5,8 @@ import Navbar from "./components/navbar";
 import Footer from "./components/Footer";
 import Contact from "./components/Contact";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
   return (
@@ -17,6 +19,14 @@ export default function App() {
         </Routes>
       </div>
       <Footer />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+      />
     </BrowserRouter>
   );
 }
