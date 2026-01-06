@@ -20,6 +20,13 @@ const Manager = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
   const [form, setForm] = useState({ site: "", username: "", password: "" });
+  const [visiblePassword, setVisiblePassword] = useState({});
+  const togglePassword = (index) => {
+    setVisiblePassword((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   return (
     <>
@@ -37,7 +44,7 @@ const Manager = () => {
             className="rounded-lg border w-full border-purple-600 text-black p-4 py-1 "
             name="site"
             placeholder="Enter Website URL"
-            id="URL"
+            id="site"
             value={form.site}
             onChange={handleChange}
           />
@@ -79,6 +86,58 @@ const Manager = () => {
             ></lord-icon>
             Add Password
           </button>
+        </div>
+        <div>
+          <h2 className="py-4 text-2xl font-bold text-purple-700">
+            Your Passwords
+          </h2>
+          {passwordArray.length === 0 && (
+            <p className="font-semibold text-center text-2xl text-red-600">
+              No passwords saved yet.
+            </p>
+          )}
+          {passwordArray.length !== 0 && (
+            <table className="table-auto w-full rounded-md overflow-hidden">
+              <thead className=" bg-purple-800 text-white">
+                <tr>
+                  <th>Site</th>
+                  <th>User Name</th>
+                  <th>Password</th>
+                </tr>
+              </thead>
+              <tbody className="bg-purple-200 font-semibold">
+                {passwordArray.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className=" py-3 border border-white text-center">
+                        <a
+                          href={item.site}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {item.site}
+                        </a>
+                      </td>
+                      <td className=" py-3 border border-white text-center">
+                        {item.username}
+                      </td>
+                      <td className="py-3 border border-white text-center relative">
+                        {visiblePassword[index] ? item.password : "•••••"}
+                        <div className="absolute right-2 top-4">
+                          <span
+                            className="relative cursor-pointer"
+                            onClick={() => togglePassword(index)}
+                          >
+                            {visiblePassword[index] ? <FiEyeOff /> : <FiEye />}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>
