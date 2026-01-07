@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Copy from "../assets/copy-alt.png";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,10 +15,15 @@ const Manager = () => {
   }, []);
 
   const savePassword = () => {
-    setPasswordArray([...passwordArray, form]);
-    localStorage.setItem("password", JSON.stringify([...passwordArray, form]));
+    setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+    localStorage.setItem(
+      "password",
+      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+    );
+    setForm({ site: "", username: "", password: "" });
     console.log([...passwordArray, form]);
-    toast.success("Password Added Successfully");
+
+    toast.success("Password Saved Successfully");
   };
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -33,6 +39,26 @@ const Manager = () => {
   const copyText = async (text) => {
     await navigator.clipboard.writeText(text);
     toast.success("Copied!");
+  };
+
+  const deletePassword = (id) => {
+    console.log("Delete Password with id", id);
+    let c = confirm("Do you really wan to delete this ?");
+    if (c) {
+      setPasswordArray(passwordArray.filter((item) => item.id !== id));
+      localStorage.setItem(
+        "password",
+        JSON.stringify(passwordArray.filter((item) => item.id !== id))
+      );
+      toast.success("Deleted Successfully");
+    }
+  };
+
+  const editPassword = (id) => {
+    console.log("Edit Password with id ", id);
+    setForm(passwordArray.filter((i) => i.id === id)[0]);
+    setPasswordArray(passwordArray.filter((item) => item.id !== id));
+    toast.success("Password hass been updated with id", id);
   };
 
   return (
@@ -91,7 +117,7 @@ const Manager = () => {
               src="https://cdn.lordicon.com/efxgwrkc.json"
               trigger="hover"
             ></lord-icon>
-            Add Password
+            Save
           </button>
         </div>
         <div>
@@ -110,6 +136,7 @@ const Manager = () => {
                   <th>Site</th>
                   <th>User Name</th>
                   <th>Password</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody className="bg-purple-200 font-semibold">
@@ -167,6 +194,25 @@ const Manager = () => {
                             className="w-4 cursor-pointer"
                             onClick={() => copyText(item.password)}
                           />
+                        </div>
+                      </td>
+                      <td className="border border-white">
+                        <div className="flex items-center justify-center cursor-pointer">
+                          <span onClick={() => editPassword(item.id)}>
+                            <lord-icon
+                              src="https://cdn.lordicon.com/nwfpiryp.json"
+                              trigger="hover"
+                              style={{ width: "21px", height: "21px" }}
+                            ></lord-icon>{" "}
+                          </span>
+                          <span onClick={() => deletePassword(item.id)}>
+                            <lord-icon
+                              src="https://cdn.lordicon.com/jzinekkv.json"
+                              trigger="hover"
+                              colors="primary:#e83a30,secondary:#f4a09c"
+                              style={{ width: "2p1x", height: "21px" }}
+                            ></lord-icon>
+                          </span>
                         </div>
                       </td>
                     </tr>
