@@ -65,11 +65,13 @@ const Manager = () => {
     <>
       <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)]"></div>
       <div className="mycontainer">
-        <div className=" text-4xl font-bold text-center">
+        <div className="text-xl sm:text-4xl font-bold text-center">
           <span className="text-purple-500 ">&lt;</span>
           Password
           <span className="text-purple-600">Manager/&gt;</span>
-          <p className="text-purple-700 text-xl"> Your own Password Manager</p>
+          <p className="text-purple-700 text-xs sm:text-xl">
+            Your own Password Manager
+          </p>
         </div>
         <div className="flex flex-col pt-4 gap-4 items-center">
           <input
