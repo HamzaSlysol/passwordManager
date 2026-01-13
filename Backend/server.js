@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const { MongoClient } = require("mongodb");
 const bodyParser = require("body-parser");
 const { ObjectId } = require("mongodb");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const dbName = "Password";
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
+app.use(cors());
 
 client.connect();
 // Get all passwords
